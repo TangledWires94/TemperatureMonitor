@@ -10,7 +10,7 @@ public class HeatSourcePlacement : MonoBehaviour
     TMP_InputField tempInput, rangeInput, rangeFalloffInput;
 
     Camera mainCamera;
-    float sourceTemperature = 20f, heatRange = 1.5f, heatFalloffRange = 3.5f;
+    float sourceTemperature = 50f, heatRange = 1.5f, heatFalloffRange = 3.5f;
 
     void Awake()
     {
@@ -18,6 +18,8 @@ public class HeatSourcePlacement : MonoBehaviour
         tempInput.onValueChanged.AddListener(delegate { TempInputChanged(); });
         rangeInput.onValueChanged.AddListener(delegate { RangeInputChanged(); });
         rangeFalloffInput.onValueChanged.AddListener(delegate { RangeFalloffInputChanged(); });
+        sourceTemperature = float.Parse(tempInput.text);
+        heatRange = float.Parse(rangeInput.text);
     }
 
     void Update()

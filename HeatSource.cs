@@ -46,7 +46,7 @@ public class HeatSource : MonoBehaviour
         Vector3 center = transform.position;
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(center, heatRange);
-        if(heatFalloffRange > heatRange)
+        if (heatFalloffRange > heatRange)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(center, heatFalloffRange);
