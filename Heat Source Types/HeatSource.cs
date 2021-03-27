@@ -4,6 +4,7 @@
 //override with their own implementation if needed.
 public class HeatSource : MonoBehaviour
 {
+    //If child classes override Awake they should always call the base implementation as well
     protected virtual void Awake()
     {
         TemperatureControl.RegisterHeatSource(this);
