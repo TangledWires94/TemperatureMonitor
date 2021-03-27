@@ -4,7 +4,7 @@ using TMPro;
 public class HeatSourcePlacement : MonoBehaviour
 {
     [SerializeField]
-    HeatSource placeableObject;
+    RadiusHeatSource placeableObject;
 
     [SerializeField]
     TMP_InputField tempInput, rangeInput, rangeFalloffInput;
@@ -34,7 +34,7 @@ public class HeatSourcePlacement : MonoBehaviour
                 Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                 Vector3 spawnPoint = hit.point + (hit.normal * (placeableObject.transform.localScale.y * 0.5f));
                 Debug.Log(hit.point + (hit.normal * (placeableObject.transform.localScale.y * 0.5f)));
-                HeatSource sourceObject = Instantiate(placeableObject, spawnPoint, spawnRotation);
+                RadiusHeatSource sourceObject = Instantiate(placeableObject, spawnPoint, spawnRotation);
                 sourceObject.SourceTemperature = sourceTemperature;
                 sourceObject.HeatRange = heatRange;
                 sourceObject.HeatFalloffRange = heatFalloffRange;

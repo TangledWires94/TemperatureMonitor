@@ -1,16 +1,25 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+//Static class that tracks heat sources in the scene and calculates temperature for an object at a given position
 public static class TemperatureControl
 {
     static List<HeatSource> activeHeatSources = new List<HeatSource>();
-    public static float AmbientTemperature
+    public static float AmbientTemperature //Temperature of the surrounding scene
     {
         get { return ambientTemperature; }
         set { ambientTemperature = value; }
     }
     static float ambientTemperature = 20f;
 
+    public static float TempRateOfChange //Rate at which objects will reach thermodynamic equilibrium
+    {
+        get { return tempRateOfChange; }
+        set { tempRateOfChange = value; }
+    }
+    static float tempRateOfChange = 0.5f;
+
+    //Called by heat sources during OnAwake(), adds them to list of active heat sources in the scene
     public static void RegisterHeatSource(HeatSource source)
     {
         if (!activeHeatSources.Contains(source))
@@ -19,6 +28,7 @@ public static class TemperatureControl
         }
     }
 
+    //Called by heat sources during OnDisable(), removes them from list of active heat sources in the scene
     public static void UnregisterHeatSource(HeatSource source)
     {
         if (activeHeatSources.Contains(source))
@@ -27,6 +37,7 @@ public static class TemperatureControl
         }
     }
 
+    //Gets temperature contribution from ambient temperature and all heat sources in the scene and finds new temperature at that point in world space based on current temperature
     public static float GetTemperature(Vector3 position, float currentTemp)
     {
         float targetTemperatureSum = ambientTemperature;
@@ -34,22 +45,15 @@ public static class TemperatureControl
         for (int i = 0; i < activeHeatSources.Count; i++)
         {
             HeatSource source = activeHeatSources[i];
-            float tempContribution = 0f;
-            float distance = (source.transform.position - position).magnitude;
-            if(distance <= source.HeatRange)
+            float tempContribution = source.GetTemperatureContribution(position);
+            if(tempContribution != 0f)
             {
-                tempContribution = source.SourceTemperature;
-                numberOfSources += 1f;
-            } else if (distance < source.HeatFalloffRange)
-            {
-                float tempProportion = 1 - ((distance - source.HeatRange) / (source.HeatFalloffRange - source.HeatRange));
-                tempContribution = source.SourceTemperature * tempProportion;
+                targetTemperatureSum += tempContribution;
                 numberOfSources += 1;
             }
-            targetTemperatureSum += tempContribution;
         }
         float targetTemperature = targetTemperatureSum / numberOfSources;
-        float temperature = Mathf.Lerp(currentTemp, targetTemperature, Time.deltaTime);
+        float temperature = Mathf.Lerp(currentTemp, targetTemperature, Time.deltaTime * tempRateOfChange);
         return temperature;
     }
 }
