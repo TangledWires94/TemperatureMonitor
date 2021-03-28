@@ -4,6 +4,7 @@
 //override with their own implementation if needed.
 public class HeatSource : MonoBehaviour
 {
+    //If child classes override Awake they should always call the base implementation as well
     protected virtual void Awake()
     {
         TemperatureControl.RegisterHeatSource(this);
@@ -17,5 +18,10 @@ public class HeatSource : MonoBehaviour
     public virtual float GetTemperatureContribution(Vector3 position)
     {
         return 0f;
+    }
+
+    public virtual void InitialiseHeatSource(float sourceTemperature, float heatRange, float heatFalloffRange, float angle)
+    {
+
     }
 }

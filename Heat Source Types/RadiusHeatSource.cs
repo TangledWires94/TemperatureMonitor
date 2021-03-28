@@ -66,4 +66,12 @@ public class RadiusHeatSource : HeatSource
         }
         return tempContribution;
     }
+
+    //Set heating parameters
+    public override void InitialiseHeatSource(float sourceTemperature, float heatRange, float heatFalloffRange, float angle)
+    {
+        this.sourceTemperature = sourceTemperature;
+        this.heatRange = heatRange;
+        this.heatFalloffRange = heatFalloffRange;
+    }
 }

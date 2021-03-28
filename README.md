@@ -15,6 +15,9 @@ Heat Source - parent class for components that generate heat in the scene, funct
 Radius Heat Source - child of heat source, objects within a set radius receive the full temperature contribution, beyond radius
 		     contribution falls off by 1/x^2 as object approaces falloff radius beyond which contribution is 0.
 
+Collider Heat Source - child of heat source, any temperature monitors within the game objects collider recieve the full temperature 
+		       contribution
+
 Temperature Monitor - checks the temperature control class for its current temperature
 
 Temperature Colour Change - checks temperature monitor component and changes material colour (hot = red, cold = blue) and UI elements
