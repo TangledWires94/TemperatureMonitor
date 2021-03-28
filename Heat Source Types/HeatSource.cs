@@ -19,4 +19,9 @@ public class HeatSource : MonoBehaviour
     {
         return 0f;
     }
+
+    public virtual void InitialiseHeatSource(float sourceTemperature, float heatRange, float heatFalloffRange, float angle)
+    {
+
+    }
 }

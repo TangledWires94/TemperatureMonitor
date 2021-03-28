@@ -6,7 +6,7 @@ using TMPro;
 public class TemperatureColourChange : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI displayText;
+    TextMeshProUGUI displayText = default;
 
     [SerializeField]
     float minTemp = 0f, maxTemp = 75f, hotHue = 0f, coldHue = 240f;
