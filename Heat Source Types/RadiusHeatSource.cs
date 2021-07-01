@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-//Radiates temperature ina  sphere around the GameObject. Gives full contribution of temperature within the heatRange and a reducing contribution up to the fall off range
+//Child class of HeatSource, contributes to the temperature of any temperature monitor components in a sphere around the GameObject. Gives full contribution of temperature 
+//within the heatRange and a reducing contribution up to the fall off range
 public class RadiusHeatSource : HeatSource
 {
     [SerializeField, Range(-20f, 100f), Tooltip("Temperature in Degrees Celcius")]
@@ -51,18 +52,21 @@ public class RadiusHeatSource : HeatSource
 
     //When temperature monitor is within the heat range it recieves full contribution from the heat source, when its within the falloff range contribution changes by 1/x^2
     //until temperature monitor is outside of the falloff range
-    public override float GetTemperatureContribution(Vector3 position)
+    public override float GetTemperatureContribution(Vector3 position, out float contributionRatio)
     {
         float tempContribution = 0f;
+        contributionRatio = 0f;
         float distance = (transform.position - position).magnitude;
         if (distance <= heatRange)
         {
             tempContribution = sourceTemperature;
+            contributionRatio = 1f;
         }
         else if (distance < heatFalloffRange)
         {
             float tempProportion = Mathf.Pow(1 - ((distance - heatRange) / (heatFalloffRange - heatRange)), 2); //Reducing by 1/x^2 to give slightly more realistic dropoff
             tempContribution = sourceTemperature * tempProportion;
+            contributionRatio = tempProportion;
         }
         return tempContribution;
     }

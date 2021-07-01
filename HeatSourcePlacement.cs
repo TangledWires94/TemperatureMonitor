@@ -2,6 +2,7 @@
 using TMPro;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 //Allows users to configure and place heat source prefabs into the scene with left click
 public class HeatSourcePlacement : MonoBehaviour
@@ -16,7 +17,13 @@ public class HeatSourcePlacement : MonoBehaviour
     TMP_Dropdown heatSourceTypeInput = default;
 
     [SerializeField]
-    TMP_InputField tempInput = default, rangeInput = default, rangeFalloffInput = default, angleInput = default;
+    TMP_InputField tempInput = default;
+
+    [SerializeField]
+    Slider rangeInput = default, rangeFalloffInput = default, angleInput = default;
+
+    [SerializeField]
+    TextMeshProUGUI rangeText = default, rangeFalloffText = default, angleText = default;
 
     [SerializeField]
     GameObject rangeSettingsContainer = default, angleSettingsContainer = default;
@@ -41,12 +48,46 @@ public class HeatSourcePlacement : MonoBehaviour
         heatSourceTypeInput.AddOptions(strings);
 
         //Create delegate functions to update variables when UI values change
-        tempInput.onValueChanged.AddListener(delegate { float.TryParse(tempInput.text, out sourceTemperature); });
-        rangeInput.onValueChanged.AddListener(delegate { float.TryParse(rangeInput.text, out heatRange); });
-        rangeFalloffInput.onValueChanged.AddListener(delegate { float.TryParse(rangeFalloffInput.text, out heatFalloffRange); });
-        angleInput.onValueChanged.AddListener(delegate { float.TryParse(angleInput.text, out angle); });
+        tempInput.onValueChanged.AddListener(delegate 
+        { 
+            float.TryParse(tempInput.text, out sourceTemperature); 
+        });
+
+        rangeInput.onValueChanged.AddListener(delegate 
+        {
+            heatRange = rangeInput.value;
+            rangeText.text = "Range = " + heatRange.ToString("0.0");
+            if (heatRange > heatFalloffRange)
+            {
+                heatFalloffRange = heatRange;
+                rangeFalloffInput.value = heatFalloffRange;
+                rangeFalloffText.text = "Range Falloff = " + heatFalloffRange.ToString("0.0");
+            }
+        });
+
+        rangeFalloffInput.onValueChanged.AddListener(delegate 
+        { 
+            heatFalloffRange = rangeFalloffInput.value;
+            rangeFalloffText.text = "Range Falloff = " + heatFalloffRange.ToString("0.0");
+            if (heatFalloffRange < heatRange)
+            {
+                heatRange = heatFalloffRange;
+                rangeInput.value = heatRange;
+                rangeText.text = "Range = " + heatRange.ToString("0.0");
+            }
+        });
+
+        angleInput.onValueChanged.AddListener(delegate 
+        { 
+            angle = angleInput.value;
+            angleText.text = "Angle = " + angle.ToString("0");
+        });
+
+        //Initialise values
         float.TryParse(tempInput.text, out sourceTemperature);
-        float.TryParse(rangeInput.text, out heatRange);
+        heatRange = rangeInput.value;
+        heatFalloffRange = rangeFalloffInput.value;
+        angle = angleInput.value;
 
         //Initialise UI
         HeatSourceTypeChange();
@@ -81,10 +122,13 @@ public class HeatSourcePlacement : MonoBehaviour
             case HeatSourceType.Radius:
                 rangeSettingsContainer.gameObject.SetActive(true);
                 angleSettingsContainer.gameObject.SetActive(false);
+                rangeText.text = "Range = " + heatRange.ToString("0.0");
+                rangeFalloffText.text = "Range Falloff = " + heatFalloffRange.ToString("0.0");
                 break;
             case HeatSourceType.Collider:
                 rangeSettingsContainer.gameObject.SetActive(false);
                 angleSettingsContainer.gameObject.SetActive(true);
+                angleText.text = "Angle = " + angle.ToString("0");
                 break;
             default:
                 break;

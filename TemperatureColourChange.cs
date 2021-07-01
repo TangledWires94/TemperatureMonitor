@@ -35,7 +35,7 @@ public class TemperatureColourChange : MonoBehaviour
         rend.material.color = TemperatureColor(temperature);
     }
 
-    //Determines new colour based on the current temperature relative the min and max temp, closer temp is to the min temp closer the colour is the min hue
+    //Returns new colour based on the current temperature relative the min and max temp, closer temp is to the min temp closer the colour is the min hue
     Color TemperatureColor(float temp)
     {
         float t = temp / (maxTemp - minTemp);

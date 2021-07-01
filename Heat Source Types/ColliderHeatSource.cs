@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+//Child class of HeatSource, contributes to the temperature of any temperature monitor components within a space defined by a collider
 [RequireComponent(typeof(Collider))]
 public class ColliderHeatSource : HeatSource
 {
@@ -25,14 +26,16 @@ public class ColliderHeatSource : HeatSource
     }
 
     //If the point is within the bounds of the collider it recieves the full contribution, otherwise no contibution
-    public override float GetTemperatureContribution(Vector3 position)
+    public override float GetTemperatureContribution(Vector3 position, out float contributionRatio)
     {
         if (col.bounds.Contains(position))
         {
+            contributionRatio = 1f;
             return sourceTemperature;
         } 
         else
         {
+            contributionRatio = 0f;
             return 0f;
         }
     }
