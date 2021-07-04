@@ -1,7 +1,8 @@
 # TemperatureMonitor
 Test project demonstrating a simple temperature simulation system. Objects with a heat source componeent contribute to the temperature of 
 objects with a temperature monitor component based on their relevant position and the ambient temperature of the scene. Heat source objects 
-can be placed in the scene by left clicking on any surface.
+can be placed in the scene by left clicking on any surface. Uses spatial partitioning pattern to determine which heat sources to check based
+on their position in a grid.
 
 Scripts included;
 
